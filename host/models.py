@@ -9,6 +9,7 @@ class tbl_host(models.Model):
         ('property_details_entering', 'Property Details Entering'),
         ('file_uploaded', 'File Uploaded'),
         ('pending', 'Pending'),
+         ('approved', 'approved'),
     ]
     
     name = models.CharField(max_length=255, null=True, blank=True)

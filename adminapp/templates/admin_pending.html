@@ -121,8 +121,9 @@
                         <th>Password</th>
                         <th>Property Type</th>
                         <th>Address</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
                         <th>place</th>
-                       
                         <th>Description</th>
                         <th>Amenities</th>
                         <th>Profile Picture</th>
@@ -142,14 +143,29 @@
                         <td>{{ host.password }}</td>
                         <td>{{ host.property_type }}</td>
                         <td>{{ host.address }}</td>
-                        
+                        <td>{{ host.latitude }}</td>
+                        <td>{{ host.longitude }}</td>
                         <td>{{ host.place }}</td>
                         <td>{{ host.description }}</td>
                         <td>{{ host.amenities }}</td>
                         
                         
-                        <td><img src="{{ host.profile_picture.url }}" alt="Profile Picture" style="max-width: 150px;"></td>
-                        <td><img src="{{ host.id_proof.url }}" alt="ID Proof" style="max-width: 150px;"></td>
+                        <td>
+                            {% if host.profile_picture %}
+                                <img src="{{ host.profile_picture.url }}" alt="Profile Picture" style="max-width: 150px;">
+                            {% else %}
+                                No Profile Picture
+                            {% endif %}
+                        </td>
+                        
+                        <td>
+                            {% if host.id_proof %}
+                                <img src="{{ host.id_proof.url }}" alt="ID Proof" style="max-width: 150px;">
+                            {% else %}
+                                No ID Proof
+                            {% endif %}
+                        </td>
+                        
                         <td>{{ host.rate }}</td>
                         <td>
                             {% for image in host.property_images.all %}

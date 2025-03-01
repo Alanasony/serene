@@ -1,18 +1,6 @@
 from django.db import models
 
 from host.models import tbl_host
-
-class tbl_register(models.Model):
-    username = models.CharField(max_length=255)
-    email = models.EmailField(unique=True, max_length=191)  # Reduce to 191
-    password = models.CharField(max_length=255)  
-    address = models.TextField(blank=True, null=True) 
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    phone_number = models.CharField(max_length=15)
-    date_of_birth = models.DateField(null=True, blank=True)
-
-    def __str__(self):
-        return self.username
     
 class tbl_user_register(models.Model):
     username = models.CharField(max_length=255)
@@ -30,7 +18,7 @@ from django.db import models
 from django.contrib.auth import get_user_model  
 from datetime import date
 
-tbl_register = get_user_model()  
+tbl_user_register = get_user_model()  
 
 class Booking(models.Model):
     PAYMENT_OPTIONS = [
@@ -65,7 +53,7 @@ class Booking(models.Model):
     refund_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     payment_option = models.CharField(max_length=20, choices=PAYMENT_OPTIONS, default='cash_on_arrival')  
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS, default='pending')  
-    booking_status = models.CharField(max_length=20, choices=BOOKING_STATUS, default='')  
+    booking_status = models.CharField(max_length=20, choices=BOOKING_STATUS, default='booking_initiated')  
     booking_date = models.DateTimeField(auto_now_add=True)  
 
     def __str__(self):
@@ -110,3 +98,22 @@ class Card(models.Model):
 
     def __str__(self):
         return f"Card Payment for Booking {self.booking.id} - {self.status}"
+
+
+
+class BookingReport(models.Model):
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name='reports')
+    user = models.ForeignKey(tbl_user_register, on_delete=models.CASCADE)  # Assuming user authentication
+    star_rating = models.PositiveIntegerField(choices=[(i, i) for i in range(1, 6)])  # 1-5 rating
+    feedback = models.TextField(blank=True, null=True)  # Optional feedback
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Report for Booking {self.booking.id} - {self.star_rating} stars"
+
+class BookingReportImage(models.Model):
+    report = models.ForeignKey(BookingReport, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='report_images/')  # Store images in media folder
+
+    def __str__(self):
+        return f"Image for Report {self.report.id}"

@@ -40,12 +40,10 @@ class HostCreateView(viewsets.ModelViewSet):
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
 class HostUpdateView(generics.UpdateAPIView):
     queryset = tbl_host.objects.all()
     serializer_class = HostSerializer
-    parser_classes = (MultiPartParser, FormParser)
+    
 
 
 # Host Retrieve, Update & Delete View
